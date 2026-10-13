@@ -26,26 +26,27 @@ export default async function BuyPage({ params }: PageProps<"/billetterie/[id]">
   return (
     <>
       <header className="border-b border-line bg-surface">
-        <div className="container-site py-8">
-          <Link href="/billetterie" className="text-sm text-muted hover:text-fg">← Tous les matchs</Link>
-          <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <div className="flex items-center gap-3">
+        <div className="container-site py-6">
+          <Link href="/billetterie" className="text-sm font-semibold text-pelouse hover:underline">
+            ← Tous les matchs
+          </Link>
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <div className="flex items-center gap-2">
               <ClubBadge club={home} size={48} />
-              <span className="font-display text-sm font-bold text-faint">VS</span>
               <ClubBadge club={away} size={48} />
             </div>
             <div>
-              <h1 className="font-display text-3xl leading-tight font-extrabold uppercase sm:text-4xl">
-                {home.name} – {away.name}
+              <h1 className="font-display text-4xl leading-none font-black uppercase sm:text-5xl">
+                {home.name} <span className="text-faint">-</span> {away.name}
               </h1>
-              <p className="text-sm text-muted">
+              <p className="mt-1 text-sm text-muted">
                 Journée {match.round} · {fmtDateLong(match.kickoff)} à {fmtTime(match.kickoff)} · {stadium?.name ?? "Stade à confirmer"}
               </p>
             </div>
           </div>
         </div>
       </header>
-      <div className="container-site py-10">
+      <div className="container-site py-8">
         <Checkout matchId={match.id} />
       </div>
     </>

@@ -4,7 +4,7 @@ import { ClubBadge, PageHeader } from "@/components/ui";
 import { CLUBS } from "@/data/clubs";
 import { currentClubs, getStadium, rank2025 } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Les clubs" };
+export const metadata: Metadata = { title: "Clubs" };
 
 export default function EquipesPage() {
   const clubs = currentClubs();
@@ -12,54 +12,57 @@ export default function EquipesPage() {
 
   return (
     <>
-      <PageHeader eyebrow="National Foot 1 · 2026-2027" title="Les clubs">
-        Les 14 clubs engagés cette saison, leur ville, leur stade et leur place la saison dernière.
+      <PageHeader kicker="National Foot 1 · 2026-2027" title="Clubs">
+        Les 14 clubs de la saison, avec leur stade et leur place la saison dernière.
       </PageHeader>
-      <div className="container-site py-10">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="container-site py-8">
+        <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {clubs.map((club) => {
             const stadium = getStadium(club.stadiumId);
             const rank = rank2025(club.slug);
             const body = (
               <>
-                <div aria-hidden className="pointer-events-none absolute -right-10 -bottom-14 size-44 rounded-full opacity-25 blur-2xl" style={{ background: club.colors[0] }} />
-                <ClubBadge club={club} size={56} />
-                <div className="relative min-w-0 flex-1">
-                  <h2 className={`font-display text-2xl leading-tight font-bold uppercase ${club.unconfirmed ? "italic text-faint" : "group-hover:text-yellow"}`}>
+                <ClubBadge club={club} size={60} />
+                <div className="min-w-0 flex-1">
+                  <h2 className={`font-display text-2xl leading-tight font-bold ${club.unconfirmed ? "font-normal text-faint italic" : "group-hover:underline"}`}>
                     {club.name}
                   </h2>
                   <p className="text-sm text-muted">{club.city}</p>
-                  <p className="mt-1 truncate text-xs text-faint">{stadium?.name ?? "Stade à confirmer"}</p>
+                  <p className="truncate text-xs text-faint">{stadium?.name ?? "Stade à confirmer"}</p>
                 </div>
-                <div className="relative text-right">
+                <p className="text-right text-xs text-faint">
                   {rank ? (
                     <>
-                      <p className="font-display text-3xl font-extrabold tabular">{rank}<sup className="text-sm">e</sup></p>
-                      <p className="text-[10px] tracking-wider text-faint uppercase">en 2025-26</p>
+                      <span className="block font-display text-3xl font-extrabold text-fg tabular">{rank}e</span>
+                      en 2025-26
                     </>
-                  ) : (
-                    <p className="rounded-full bg-green/15 px-2 py-1 text-[10px] font-bold tracking-wider text-green-2 uppercase">Promu</p>
+                  ) : club.unconfirmed ? null : (
+                    <span className="font-semibold text-pelouse">Promu</span>
                   )}
-                </div>
+                </p>
               </>
             );
-            return club.unconfirmed ? (
-              <div key={club.slug} className="relative flex items-center gap-4 overflow-hidden rounded-2xl border border-dashed border-line-strong p-5">{body}</div>
-            ) : (
-              <Link key={club.slug} href={`/equipes/${club.slug}`} className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-line bg-surface p-5 transition hover:border-green/50">
-                {body}
-              </Link>
+            return (
+              <li key={club.slug} className="bg-surface">
+                {club.unconfirmed ? (
+                  <div className="flex h-full items-center gap-4 p-5">{body}</div>
+                ) : (
+                  <Link href={`/equipes/${club.slug}`} className="group flex h-full items-center gap-4 p-5 hover:bg-surface-2">
+                    {body}
+                  </Link>
+                )}
+              </li>
             );
           })}
-        </div>
+        </ul>
 
         {relegated.length > 0 && (
-          <section className="mt-14">
-            <h2 className="font-display text-2xl font-bold uppercase text-muted">Relégués en National Foot 2</h2>
-            <div className="mt-4 flex flex-wrap gap-3">
+          <section className="mt-12">
+            <h2 className="font-display text-2xl font-bold">Relégués en National Foot 2</h2>
+            <div className="mt-3 flex flex-wrap gap-3">
               {relegated.map((club) => (
-                <Link key={club.slug} href={`/equipes/${club.slug}`} className="flex items-center gap-2 rounded-xl border border-line px-4 py-2 text-sm text-muted hover:text-fg">
-                  <ClubBadge club={club} size={22} /> {club.name}
+                <Link key={club.slug} href={`/equipes/${club.slug}`} className="flex items-center gap-2 rounded-md border border-line bg-surface px-3 py-2 text-sm font-semibold hover:border-fg">
+                  <ClubBadge club={club} size={24} /> {club.name}
                 </Link>
               ))}
             </div>

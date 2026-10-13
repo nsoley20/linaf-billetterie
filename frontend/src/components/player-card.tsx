@@ -12,44 +12,45 @@ export function initials(name: string) {
     .toUpperCase();
 }
 
-/** Avatar générique (pas de photo disponible) aux couleurs du club. */
-export function PlayerAvatar({ player, size = 56 }: { player: Player; size?: number }) {
-  const [bg, accent] = getClub(player.club).colors;
+/** Pastille aux initiales (pas de photo disponible), aux couleurs du club. */
+export function PlayerAvatar({ player, size = 48 }: { player: Player; size?: number }) {
+  const [main] = getClub(player.club).colors;
   return (
     <div
       aria-hidden
-      className="grid shrink-0 place-items-center rounded-full font-display font-extrabold"
-      style={{ width: size, height: size, background: `linear-gradient(140deg, ${bg}, #060b14)`, color: accent, fontSize: size * 0.38, boxShadow: `inset 0 0 0 2px ${accent}55` }}
+      className="grid shrink-0 place-items-center rounded-full font-display font-extrabold text-white"
+      style={{ width: size, height: size, background: main, fontSize: size * 0.4 }}
     >
       {initials(player.name)}
     </div>
   );
 }
 
-/** Carte « distinction » : meilleur joueur, joueur du mois… */
+/** Distinction individuelle : titre, joueur, chiffre clé. */
 export function AwardCard({ title, player, stat, statLabel, subtitle }: { title: string; player: Player; stat: string; statLabel: string; subtitle?: string }) {
   const club = getClub(player.club);
   return (
-    <Link href={`/joueurs/${player.id}`} className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface p-5 transition hover:border-yellow/40">
-      <div aria-hidden className="pointer-events-none absolute -top-16 -right-16 size-48 rounded-full opacity-30 blur-2xl" style={{ background: club.colors[0] }} />
-      <div className="relative flex items-center justify-between gap-2">
-        <p className="text-xs font-bold tracking-[0.18em] text-yellow uppercase">{title}</p>
+    <Link href={`/joueurs/${player.id}`} className="group flex flex-col rounded-lg border border-line bg-surface p-5 transition-colors hover:border-fg">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold text-pelouse">
+          {title}
+          {subtitle && <span className="font-normal text-faint"> · {subtitle}</span>}
+        </p>
         <DemoTag />
       </div>
-      {subtitle && <p className="relative mt-1 text-xs text-faint">{subtitle}</p>}
-      <div className="relative mt-5 flex items-center gap-4">
-        <PlayerAvatar player={player} size={64} />
+      <div className="mt-4 flex items-center gap-3">
+        <PlayerAvatar player={player} size={52} />
         <div className="min-w-0">
-          <p className="truncate font-display text-2xl font-bold uppercase group-hover:text-yellow">{player.name}</p>
+          <p className="truncate font-display text-2xl leading-tight font-bold group-hover:underline">{player.name}</p>
           <p className="flex items-center gap-1.5 text-sm text-muted">
-            <ClubBadge club={club} size={16} /> {club.name} · {player.position}
+            <ClubBadge club={club} size={16} /> {club.name}
           </p>
         </div>
       </div>
-      <div className="relative mt-5 flex items-baseline gap-2 border-t border-line pt-4">
-        <span className="font-display text-4xl font-extrabold text-yellow tabular">{stat}</span>
-        <span className="text-sm text-faint">{statLabel}</span>
-      </div>
+      <p className="mt-4 border-t border-line pt-3">
+        <span className="font-display text-4xl font-extrabold tabular">{stat}</span>
+        <span className="ml-2 text-sm text-muted">{statLabel}</span>
+      </p>
     </Link>
   );
 }

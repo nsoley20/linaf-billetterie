@@ -1,34 +1,32 @@
 @import "tailwindcss";
 
+/*
+ * Palette « affiche de match » :
+ *   craie (fond), encre (texte), pelouse (actions), soleil (pastille), lagune (liens secondaires).
+ */
 @theme {
-  --color-bg: #060b14;
-  --color-surface: #0b1424;
-  --color-surface-2: #111d33;
-  --color-surface-3: #182843;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-line-strong: rgb(255 255 255 / 0.16);
-  --color-fg: #f4f6fa;
-  --color-muted: rgb(244 246 250 / 0.68);
-  --color-faint: rgb(244 246 250 / 0.45);
+  --color-bg: #f2f4ef;
+  --color-surface: #ffffff;
+  --color-surface-2: #f7f8f5;
+  --color-line: #dde1d8;
+  --color-line-strong: #c2c8be;
+  --color-fg: #10192b;
+  --color-muted: #454e60;
+  --color-faint: #687083;
 
-  --color-green: #009e60;
-  --color-green-2: #19c27a;
-  --color-yellow: #fcd116;
-  --color-blue: #3a75c4;
-  --color-red: #ef4444;
+  --color-pelouse: #0a6b44;
+  --color-pelouse-dark: #07563a;
+  --color-soleil: #ffd21f;
+  --color-lagune: #2958a8;
+  --color-alerte: #c62828;
 
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-barlow), "Arial Narrow", sans-serif;
-
-  --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: none; }
-  }
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
+  --font-display: var(--font-shoulders), "Arial Narrow", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -42,17 +40,17 @@ body {
 }
 
 ::selection {
-  background: var(--color-yellow);
-  color: #000;
+  background: var(--color-soleil);
+  color: var(--color-fg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-yellow);
+  outline: 2px solid var(--color-lagune);
   outline-offset: 2px;
 }
 
 @utility tricolor {
-  background: linear-gradient(90deg, var(--color-green) 0 33.34%, var(--color-yellow) 33.34% 66.67%, var(--color-blue) 66.67%);
+  background: linear-gradient(90deg, #009e60 0 33.34%, #fcd116 33.34% 66.67%, #3a75c4 66.67%);
 }
 
 @utility tabular {
@@ -61,7 +59,7 @@ body {
 
 @utility container-site {
   width: 100%;
-  max-width: 76rem;
+  max-width: 72rem;
   margin-inline: auto;
   padding-inline: 1rem;
   @media (width >= 40rem) {

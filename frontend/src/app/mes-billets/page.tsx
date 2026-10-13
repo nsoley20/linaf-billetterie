@@ -7,10 +7,10 @@ export const metadata: Metadata = { title: "Mes billets" };
 export default function MesBilletsPage() {
   return (
     <>
-      <PageHeader eyebrow="Billetterie" title="Mes billets">
-        Présentez le QR code à l&apos;entrée du stade. Vos billets sont enregistrés sur cet appareil.
+      <PageHeader kicker="Billetterie" title="Mes billets">
+        Montrez le QR code à l&apos;entrée du stade. Les billets restent sur ce téléphone ou cet ordinateur.
       </PageHeader>
-      <div className="container-site py-10">
+      <div className="container-site py-8">
         <MyTickets />
       </div>
     </>

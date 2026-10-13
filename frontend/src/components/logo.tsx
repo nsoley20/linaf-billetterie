@@ -1,5 +1,8 @@
-/** Logo LINAF (repris du site d'origine). `id` évite les collisions de dégradés quand il apparaît deux fois. */
-export function Logo({ id, className }: { id: string; className?: string }) {
+/**
+ * Logo LINAF (repris du site d'origine). `id` évite les collisions de dégradés quand il apparaît deux fois.
+ * `tone` : couleur du mot « LINAF » selon le fond.
+ */
+export function Logo({ id, className, tone = "dark" }: { id: string; className?: string; tone?: "dark" | "light" }) {
   return (
     <svg viewBox="0 0 346.22 227.99" className={className} role="img" aria-label="LINAF">
       <defs>
@@ -18,7 +21,7 @@ export function Logo({ id, className }: { id: string; className?: string }) {
       </defs>
       <path
         d="M130.73 148.68h20.55l-2.78 11.48h-26.25c-5.59 0-9.7-5.25-8.36-10.67l10.65-43.23h16.69l-10.5 42.43zm42.09 11.48h-16.69l13.28-53.91h16.69l-13.28 53.91zm45.68-20.69h.18l8.26-33.22h15.62l-13.28 53.91h-18.31l-2.96-33.3h-.18l-8.17 33.3h-15.62l13.28-53.91h18.67l2.51 33.22zm69.74 20.69h-17.77l.54-9.44h-13.28l-3.95 9.44h-17.77l28.9-53.91h21l2.33 53.91zm-25.85-20.01h9.33l1.08-22.88h-.18l-10.23 22.88zm80.95-22.42h-21.27l-2.24 9.21h19.92l-2.69 11.02h-19.92l-5.48 22.2h-16.69l11.07-44.91c1.3-5.29 6.04-9 11.49-9h28.69l-2.87 11.48z"
-        fill="#fff"
+        fill={tone === "dark" ? "#10192b" : "#fff"}
       />
       <path d="M100.9,22.42l18.37,53.93h58.07l11.85-41.48s10.67,3.56,30.22,33.19c0,0-18.96-55.7-90.67-66.37l-27.85,20.74Z" fill={`url(#${id}-a)`} />
       <path d="M85.38,174.13l-4-55.11-56-12.15L4.79,140.5s3.26,59.41,80.59,86.67c0,0-39.41-17.19-45.63-32l45.63-21.04Z" fill={`url(#${id}-b)`} />

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MatchRow } from "@/components/match-row";
+import { MatchList, MatchRow } from "@/components/match-row";
 import { PlayerAvatar } from "@/components/player-card";
 import { StandingsTable } from "@/components/standings-table";
-import { Card, ClubBadge, DemoTag, Eyebrow, Notice, SectionTitle } from "@/components/ui";
+import { Card, ClubBadge, DemoTag, Notice, SectionTitle } from "@/components/ui";
 import { CLUBS, NF1_2026_27 } from "@/data/clubs";
 import { STANDINGS_2025_26 } from "@/data/standings-2025-26";
 import { findClub, getStadium, matchesOf, playersOf, rank2025 } from "@/lib/data";
@@ -35,59 +35,64 @@ export default async function ClubPage({ params }: PageProps<"/equipes/[slug]">)
   const facts: [string, string][] = [
     ["Ville", club.city],
     ["Stade", stadium?.name ?? "À confirmer"],
-    ["Capacité", stadium?.capacity ? `${fmtNumber(stadium.capacity)} places` : "—"],
+    ["Capacité", stadium?.capacity ? `${fmtNumber(stadium.capacity)} places` : "Non renseignée"],
     ["Saison 2026-27", inNf1 ? "National Foot 1" : "National Foot 2"],
   ];
 
   return (
     <>
-      <header className="relative overflow-hidden border-b border-line">
-        <div aria-hidden className="absolute inset-0 opacity-50" style={{ background: `radial-gradient(70% 120% at 0% 0%, ${club.colors[0]}, transparent 70%)` }} />
-        <div className="container-site relative flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:py-14">
-          <ClubBadge club={club} size={110} />
-          <div>
-            <Eyebrow>{inNf1 ? "National Foot 1" : "Relégué en National Foot 2"}</Eyebrow>
-            <h1 className="mt-2 font-display text-5xl leading-none font-extrabold uppercase sm:text-7xl">{club.name}</h1>
-            <p className="mt-2 text-muted">{club.city}{stadium ? ` · ${stadium.name}` : ""}</p>
+      <header className="border-b border-line bg-surface">
+        <div className="h-2" style={{ background: club.colors[0] }} />
+        <div className="container-site flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:py-10">
+          <ClubBadge club={club} size={120} />
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-pelouse">{inNf1 ? "National Foot 1" : "Relégué en National Foot 2"}</p>
+            <h1 className="font-display text-5xl leading-none font-black uppercase sm:text-7xl">{club.name}</h1>
+            <p className="mt-2 text-muted">
+              {club.city}
+              {stadium ? ` · ${stadium.name}` : ""}
+            </p>
           </div>
           {row && (
-            <div className="grid grid-cols-3 gap-2 sm:ml-auto">
+            <dl className="flex gap-6 sm:ml-auto sm:text-right">
               {[
-                [`${rank}e`, "2025-26"],
-                [String(row.points), "points"],
-                [fmtSigned(row.goalsFor - row.goalsAgainst), "diff."],
-              ].map(([v, l]) => (
-                <div key={l} className="rounded-xl border border-line bg-black/30 px-4 py-3 text-center">
-                  <p className="font-display text-3xl font-extrabold text-yellow">{v}</p>
-                  <p className="text-[10px] tracking-wider text-faint uppercase">{l}</p>
+                ["2025-26", `${rank}e`],
+                ["Points", String(row.points)],
+                ["Diff.", fmtSigned(row.goalsFor - row.goalsAgainst)],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt className="text-xs text-faint">{k}</dt>
+                  <dd className="font-display text-4xl font-extrabold tabular">{v}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
           )}
         </div>
       </header>
 
-      <div className="container-site space-y-14 py-10">
+      <div className="container-site space-y-12 py-8">
         {club.note && <Notice>{club.note}</Notice>}
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.3fr]">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
           <section>
-            <SectionTitle title="Fiche du club" />
-            <Card className="divide-y divide-line">
-              {facts.map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-4 px-5 py-3 text-sm">
-                  <span className="text-faint">{k}</span>
-                  <span className="text-right font-semibold">{v}</span>
-                </div>
-              ))}
+            <SectionTitle title="Fiche" />
+            <Card>
+              <dl>
+                {facts.map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-4 border-b border-line px-5 py-3 text-sm last:border-0">
+                    <dt className="text-muted">{k}</dt>
+                    <dd className="text-right font-semibold">{v}</dd>
+                  </div>
+                ))}
+              </dl>
             </Card>
           </section>
           {row && (
             <section>
               <SectionTitle title="Saison 2025-26" href="/classement?saison=2025-26" linkLabel="Classement complet" />
               <StandingsTable rows={excerpt} startRank={start + 1} compact zones={[]} highlight={club.slug} />
-              <p className="mt-2 text-xs text-faint">
-                Bilan : {row.won} victoires, {row.drawn} nuls, {row.lost} défaites · {row.goalsFor} buts marqués, {row.goalsAgainst} encaissés.
+              <p className="mt-2 text-sm text-muted">
+                {row.won} victoires, {row.drawn} nuls, {row.lost} défaites. {row.goalsFor} buts marqués, {row.goalsAgainst} encaissés.
               </p>
             </section>
           )}
@@ -95,33 +100,37 @@ export default async function ClubPage({ params }: PageProps<"/equipes/[slug]">)
 
         {matches.length > 0 && (
           <section>
-            <SectionTitle title="Calendrier" href="/matchs" linkLabel="Tous les matchs" />
-            <div className="grid gap-2.5">
+            <SectionTitle title="Prochains matchs" href="/matchs" linkLabel="Calendrier complet" />
+            <MatchList>
               {matches.map((m) => (
                 <MatchRow key={m.id} match={m} />
               ))}
-            </div>
+            </MatchList>
           </section>
         )}
 
         <section>
-          <SectionTitle title="Joueurs clés" extra={<DemoTag />} />
+          <SectionTitle title="Joueurs" extra={<DemoTag />} />
           {squad.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Card>
               {squad.map((p) => (
-                <Link key={p.id} href={`/joueurs/${p.id}`} className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 hover:border-green/50">
-                  <PlayerAvatar player={p} />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-display text-xl font-bold uppercase">{p.name}</p>
-                    <p className="text-xs text-faint">#{p.number} · {p.position} · {p.age} ans</p>
-                  </div>
-                  <div className="text-right text-xs text-faint">
-                    <p><span className="font-display text-xl font-bold text-fg">{p.goals}</span> {plural(p.goals, "but")}</p>
-                    <p>{p.assists} {plural(p.assists, "passe")}</p>
-                  </div>
+                <Link key={p.id} href={`/joueurs/${p.id}`} className="flex items-center gap-4 border-b border-line px-5 py-3 last:border-0 hover:bg-surface-2">
+                  <span className="w-8 font-display text-2xl font-bold text-faint tabular">{p.number}</span>
+                  <PlayerAvatar player={p} size={40} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-semibold">{p.name}</span>
+                    <span className="block text-xs text-faint">
+                      {p.position} · {p.age} ans
+                    </span>
+                  </span>
+                  <span className="text-right text-sm text-muted">
+                    {p.goals} {plural(p.goals, "but")}
+                    <br />
+                    {p.assists} {plural(p.assists, "passe")}
+                  </span>
                 </Link>
               ))}
-            </div>
+            </Card>
           ) : (
             <Notice>Effectif à venir.</Notice>
           )}
