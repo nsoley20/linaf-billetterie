@@ -26,7 +26,7 @@ function TabsView({ param, tabs, active }: { param: string; tabs: Tab[]; active:
   const pathname = usePathname();
   return (
     <div>
-      <div role="tablist" className="mb-6 inline-flex rounded-xl border border-line bg-surface p-1">
+      <div role="tablist" className="mb-6 flex gap-6 border-b border-line">
         {tabs.map((t) => (
           <Link
             key={t.id}
@@ -35,7 +35,7 @@ function TabsView({ param, tabs, active }: { param: string; tabs: Tab[]; active:
             href={`${pathname}?${param}=${t.id}`}
             scroll={false}
             replace
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-muted transition hover:text-fg aria-selected:bg-green aria-selected:text-white"
+            className="-mb-px border-b-[3px] border-transparent pb-2 font-display text-2xl font-bold text-faint hover:text-fg aria-selected:border-pelouse aria-selected:text-fg"
           >
             {t.label}
           </Link>

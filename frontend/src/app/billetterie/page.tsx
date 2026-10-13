@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import { MatchRow } from "@/components/match-row";
-import { Card, Notice, PageHeader, SectionTitle } from "@/components/ui";
+import { MatchList, MatchRow } from "@/components/match-row";
+import { Card, Notice, PageHeader } from "@/components/ui";
 import { TRIBUNES } from "@/data/players";
 import { getClub, upcomingMatches } from "@/lib/data";
 import { fmtPrice } from "@/lib/format";
@@ -16,50 +16,45 @@ export default async function BilletteriePage() {
 
   return (
     <>
-      <PageHeader eyebrow="Billetterie officielle" title="Vos places, en 3 minutes">
-        Choisissez votre match, votre tribune, payez par Mobile Money ou carte, et recevez vos billets avec QR code.
+      <PageHeader kicker="Billetterie" title="Acheter des billets">
+        Choisissez un match, puis votre tribune. Vous recevez vos billets avec un QR code à présenter à l&apos;entrée.
       </PageHeader>
-      <div className="container-site grid gap-10 py-10 lg:grid-cols-[1fr_20rem]">
+      <div className="container-site grid gap-10 py-8 lg:grid-cols-[1fr_18rem]">
         <div className="space-y-10">
-          <Notice>
-            Billetterie en <strong className="text-fg">mode démonstration</strong> : paiement simulé, affiches et tarifs indicatifs.
-          </Notice>
-          {rounds.length === 0 && <p className="text-muted">Aucun match en vente pour le moment.</p>}
+          <Notice>Billetterie en démonstration : le paiement est simulé, les affiches et les tarifs sont indicatifs.</Notice>
+          {rounds.length === 0 && <p className="text-muted">Aucun match en vente pour le moment. Revenez après la publication du calendrier.</p>}
           {rounds.map((round) => (
             <section key={round}>
-              <SectionTitle title={<>Journée <span className="text-yellow">{round}</span></>} />
-              <div className="grid gap-2.5">
-                {matches.filter((m) => m.round === round).map((m) => (
-                  <MatchRow key={m.id} match={m} />
-                ))}
-              </div>
+              <h2 className="mb-3 font-display text-3xl font-bold">Journée {round}</h2>
+              <MatchList>
+                {matches
+                  .filter((m) => m.round === round)
+                  .map((m) => (
+                    <MatchRow key={m.id} match={m} />
+                  ))}
+              </MatchList>
             </section>
           ))}
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-          <Card className="p-5">
-            <h2 className="font-display text-2xl font-bold uppercase">Tarifs</h2>
-            <p className="text-xs text-faint">Tarifs indicatifs par tribune</p>
-            <ul className="mt-4 divide-y divide-line">
+          <Card>
+            <h2 className="border-b border-line px-5 py-3 font-display text-2xl font-bold">Tarifs</h2>
+            <ul>
               {TRIBUNES.map((t) => (
-                <li key={t.id} className="flex items-center justify-between gap-3 py-3">
-                  <div>
-                    <p className="font-semibold">{t.name}</p>
-                    <p className="text-xs text-faint">{t.perks}</p>
-                  </div>
-                  <p className="font-display text-xl font-bold whitespace-nowrap text-yellow">{fmtPrice(t.price)}</p>
+                <li key={t.id} className="flex items-start justify-between gap-3 border-b border-line px-5 py-3 last:border-0">
+                  <span>
+                    <span className="block font-semibold">{t.name}</span>
+                    <span className="block text-xs text-faint">{t.perks}</span>
+                  </span>
+                  <span className="font-display text-xl font-bold whitespace-nowrap">{fmtPrice(t.price)}</span>
                 </li>
               ))}
             </ul>
           </Card>
-          <Card className="p-5">
-            <h2 className="font-display text-2xl font-bold uppercase">Paiement</h2>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>● Airtel Money</li>
-              <li>● Moov Money</li>
-              <li>● Visa / Mastercard</li>
-            </ul>
+          <Card className="px-5 py-4">
+            <h2 className="font-display text-2xl font-bold">Paiement</h2>
+            <p className="mt-1 text-sm text-muted">Airtel Money, Moov Money, Visa ou Mastercard.</p>
           </Card>
         </aside>
       </div>

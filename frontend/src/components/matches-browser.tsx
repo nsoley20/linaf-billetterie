@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MatchList } from "./match-row";
 
 export type BrowserItem = { id: string; round: number; clubs: string[]; node: React.ReactNode };
 
@@ -13,14 +14,14 @@ export function MatchesBrowser({ items, clubs }: { items: BrowserItem[]; clubs: 
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-center gap-3">
-        <label htmlFor="club-filter" className="text-sm text-muted">
-          Filtrer par club
+        <label htmlFor="club-filter" className="text-sm font-semibold">
+          Club
         </label>
         <select
           id="club-filter"
           value={club}
           onChange={(e) => setClub(e.target.value)}
-          className="rounded-lg border border-line-strong bg-surface px-3 py-2 text-sm"
+          className="rounded-md border border-line-strong bg-surface px-3 py-2 text-sm"
         >
           <option value="">Tous les clubs</option>
           {clubs.map((c) => (
@@ -34,14 +35,18 @@ export function MatchesBrowser({ items, clubs }: { items: BrowserItem[]; clubs: 
       <div className="space-y-10">
         {rounds.map((round) => (
           <section key={round} aria-labelledby={`j${round}`}>
-            <h2 id={`j${round}`} className="mb-3 font-display text-2xl font-bold uppercase">
-              Journée <span className="text-yellow">{round}</span>
+            <h2 id={`j${round}`} className="mb-3 font-display text-3xl font-bold">
+              Journée {round}
             </h2>
-            <div className="grid gap-2.5">
-              {visible.filter((i) => i.round === round).map((i) => (
-                <div key={i.id}>{i.node}</div>
-              ))}
-            </div>
+            <MatchList>
+              {visible
+                .filter((i) => i.round === round)
+                .map((i) => (
+                  <div key={i.id} className="border-b border-line last:border-0">
+                    {i.node}
+                  </div>
+                ))}
+            </MatchList>
           </section>
         ))}
       </div>

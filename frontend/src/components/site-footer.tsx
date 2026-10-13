@@ -14,17 +14,17 @@ const COLS = [
   {
     title: "National Foot 1",
     links: [
-      { href: "/matchs", label: "Calendrier & résultats" },
+      { href: "/matchs", label: "Calendrier et résultats" },
       { href: "/classement", label: "Classement" },
-      { href: "/equipes", label: "Les clubs" },
-      { href: "/joueurs", label: "Joueurs & stats" },
+      { href: "/equipes", label: "Clubs" },
+      { href: "/joueurs", label: "Joueurs" },
     ],
   },
   {
     title: "La ligue",
     links: [
-      { href: "/infos", label: "À propos de la LINAF" },
-      { href: "/infos#stades", label: "Les stades" },
+      { href: "/infos", label: "La LINAF" },
+      { href: "/infos#stades", label: "Stades" },
       { href: "/infos#contact", label: "Contact" },
     ],
   },
@@ -34,21 +34,21 @@ export async function SiteFooter() {
   "use cache";
   cacheLife("days"); // pour l'année du copyright
   return (
-    <footer className="mt-20 border-t border-line bg-black/40">
+    <footer className="mt-24 bg-fg text-white">
       <div className="container-site grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <Logo id="ftr" className="h-10 w-auto" />
-          <p className="mt-4 max-w-xs text-sm text-faint">
-            Ligue Nationale de Football Professionnel du Gabon. Billetterie officielle et informations du National Foot.
+          <Logo id="ftr" tone="light" className="h-10 w-auto" />
+          <p className="mt-4 max-w-xs text-sm text-white/65">
+            Ligue Nationale de Football Professionnel du Gabon. Organisatrice du National Foot 1 et du National Foot 2.
           </p>
         </div>
         {COLS.map((col) => (
           <div key={col.title}>
-            <h2 className="mb-4 text-xs font-bold tracking-[0.2em] text-faint uppercase">{col.title}</h2>
-            <ul className="space-y-2.5">
+            <h2 className="mb-3 text-sm font-semibold text-white">{col.title}</h2>
+            <ul className="space-y-2">
               {col.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-muted hover:text-fg">
+                  <Link href={l.href} className="text-sm text-white/65 hover:text-white hover:underline">
                     {l.label}
                   </Link>
                 </li>
@@ -57,11 +57,10 @@ export async function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="container-site flex flex-col gap-2 border-t border-line py-5 text-xs text-faint sm:flex-row sm:justify-between">
-        <p>© {new Date().getFullYear()} LINAF — Ligue Nationale de Football Professionnel du Gabon.</p>
-        <p>Libreville, Gabon</p>
+      <div className="container-site flex flex-col gap-1 border-t border-white/15 py-5 text-xs text-white/50 sm:flex-row sm:justify-between">
+        <p>© {new Date().getFullYear()} LINAF, Libreville</p>
+        <p>Logos : propriété des clubs</p>
       </div>
-      <div className="tricolor h-1" />
     </footer>
   );
 }

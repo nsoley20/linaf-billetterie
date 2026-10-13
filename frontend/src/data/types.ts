@@ -12,8 +12,10 @@ export type Club = {
   short: string;
   city: string;
   stadiumId?: string;
-  /** Couleurs de l'écusson généré : [fond, accent]. */
+  /** Couleurs du club : [principale, secondaire]. */
   colors: [string, string];
+  /** Logo officiel dans /public/clubs (sinon écusson généré). */
+  logo?: string;
   /** Club dont la présence en NF1 2026-27 reste à confirmer. */
   unconfirmed?: boolean;
   note?: string;
